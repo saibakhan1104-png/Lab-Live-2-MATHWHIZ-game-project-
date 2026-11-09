@@ -209,7 +209,7 @@ mvn test
 
 **Project URL:**
 
-[`http://localhost:8080/MathWhiz/`](http://localhost:8080/MathWhiz_war_exploded/)
+[`(http://localhost:8080/MathWhiz_war_exploded/)`]
 
 ## 11. Expected Output
 
