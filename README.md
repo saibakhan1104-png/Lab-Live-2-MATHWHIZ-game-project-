@@ -207,9 +207,9 @@ mvn test
 9. Deploy the generated WAR file from the `target` folder to Tomcat 10.1.
 10. Start the Tomcat server and open the application in a browser.
 
-**Example URL:**
+**Project URL:**
 
-`http://localhost:8080/MathWhiz/`
+[`http://localhost:8080/MathWhiz/`](http://localhost:8080/MathWhiz_war_exploded/)
 
 ## 11. Expected Output
 
