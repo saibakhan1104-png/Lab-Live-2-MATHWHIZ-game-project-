@@ -1,99 +1,174 @@
 # Lab-Live-2-MATHWHIZ-game-project-
 
 # SAIBA KHAN – MATH WHIZ
+## Java Web Application Development Lab Assignment
 
-A web-based mathematical game built with **Java Servlets, JSP and JDBC (MySQL)**.
-Players enter their name, then enter their own values and answers for four challenges (prime, modulus, two trigonometry), see their score out of 10, and their result is stored in a database and ranked on a Top 10 leaderboard.
+**Project Title:** Math Whiz – Mathematics Quiz Game  
+**Student Name:** Saiba Khan  
+**Course Name:** Java Web Application Development  
+**Lab Topic:** Java Servlet and JDBC  
+**Total Marks:** 10
 
-## Project Objectives
-- Build reusable Java methods for mathematical calculations (`isPrime`, `calculateMod`, `calculateSin/Cos/Tan`).
-- Process requests on the server side with a Servlet (`GameServlet`).
-- Connect to MySQL with JDBC and `PreparedStatement`.
-- Store, sort and display scores (Top 10 leaderboard).
-- Document and submit the project through GitHub.
+---
 
-> All answers are calculated by Java methods in `MathService` at run time – no stored answers.
+## 1. Introduction
 
-## Technologies Used
-Java 17+ (tested with JDK 25), Java Servlet 4 / JSP / JSTL 1.2, JDBC, MySQL 8, Maven, Apache Tomcat 9.0, JUnit 5, HTML/CSS.
+Math Whiz is a simple web-based mathematics quiz game developed using Java Servlet, JSP, JDBC, and MySQL. The main purpose of this project is to practice Java web application development and understand how a web application communicates with a database.
 
-## Software Requirements
-- JDK 17 or newer
-- Apache Tomcat **9.0.x** (`javax.servlet` namespace)
-- MySQL Server 8.x
-- Maven 3.9+ (or IntelliJ's bundled Maven)
-- IDE: IntelliJ IDEA (Community users: install the *Smart Tomcat* plugin)
+In this game, a player answers four different mathematical challenges. The system checks the submitted answers, displays whether they are correct or incorrect, and calculates the player's total score out of 10.
 
-## Project Structure
-```
-MathWhiz/
-├── src/main/java/
-│   ├── controller/GameServlet.java
-│   ├── model/GameScore.java, Question.java
-│   ├── service/MathService.java
-│   └── dao/ScoreDAO.java, DBConnection.java
-├── src/main/webapp/ index.jsp, game.jsp, result.jsp, leaderboard.jsp, css/style.css, WEB-INF/web.xml
-├── src/test/java/service/MathServiceTest.java
-├── database/math_whiz_db.sql
-└── README.md
-```
+## 2. Objectives
 
-## Database Configuration
-Defaults (in `dao/DBConnection.java`): host `localhost:3306`, database `math_whiz_db`, user `root`, empty password.
-Override with environment variables `DB_URL`, `DB_USER`, `DB_PASSWORD` or edit the file.
+The main objectives of this project are:
 
-### Database Creation SQL (`database/math_whiz_db.sql`)
+- To develop a web application using Java Servlet and JSP.
+- To use Java methods for solving mathematical problems.
+- To connect a Java web application with a MySQL database using JDBC.
+- To validate user input and display appropriate messages.
+- To calculate and store players' scores.
+- To display a leaderboard based on players' results.
+
+## 3. Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Java 17 or later | Application logic |
+| Java Servlet | Server-side processing |
+| JSP | User interface |
+| JDBC | Database connectivity |
+| MySQL 8 | Database management |
+| Apache Tomcat 10.1 | Web server |
+| Maven | Project and dependency management |
+| JUnit 5 | Unit testing |
+
+## 4. Game Description
+
+The Math Whiz game contains four mathematical challenges. Players enter their answers, and the application checks them using Java methods.
+
+| Challenge | Description | Marks |
+|---|---|---:|
+| Challenge 1 | Prime Number Check | 2 |
+| Challenge 2 | Modulus Calculation | 2 |
+| Challenge 3 | Trigonometric Question 1 | 3 |
+| Challenge 4 | Trigonometric Question 2 | 3 |
+| **Total** | | **10** |
+
+The player receives marks according to the correctness of the submitted answers.
+
+## 5. Implementation Details
+
+### 5.1 Prime Number Check
+
+The `isPrime(int n)` method checks whether a given integer is a prime number.
+
+- Returns `1` if the number is prime.
+- Returns `0` if the number is not prime.
+- Numbers smaller than 2 are considered non-prime.
+
+### 5.2 Modulus Calculation
+
+The `calculateMod(int a, int b)` method calculates the remainder after dividing one integer by another.
+
+If the divisor is zero, the application displays the validation message:
+
+`The divisor must not be zero`
+
+### 5.3 Trigonometric Calculations
+
+The application uses the following methods:
+
+- `calculateSin(double degree)`
+- `calculateCos(double degree)`
+- `calculateTan(double degree)`
+
+The methods convert degrees into radians before performing the calculations.
+
+A tolerance of ±0.01 is used when checking trigonometric answers. The application also handles undefined tangent values, such as 90° and 270°.
+
+## 6. Database Description
+
+The project uses MySQL to store players' game results.
+
+**Database Name:** `math_whiz_db`  
+**Table Name:** `game_scores`
+
+The table contains the following fields:
+
+| Field | Description |
+|---|---|
+| id | Unique record ID |
+| player_name | Player's name |
+| score | Total score |
+| difficulty | Game difficulty |
+| played_at | Date and time of the game |
+
+The default difficulty level is `NORMAL`.
+
+### Database Setup
+
+Create the database and table using the following SQL commands:
+
 ```sql
 CREATE DATABASE IF NOT EXISTS math_whiz_db;
+
 USE math_whiz_db;
 
 CREATE TABLE IF NOT EXISTS game_scores (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     player_name VARCHAR(100) NOT NULL,
-    score       INT          NOT NULL,
-    difficulty  VARCHAR(20)  NOT NULL DEFAULT 'NORMAL',
-    played_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    score INT NOT NULL,
+    difficulty VARCHAR(20) DEFAULT 'NORMAL',
+    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE USER IF NOT EXISTS
+'mathwhiz_app'@'localhost'
+IDENTIFIED BY 'MathWhizLocal@123';
+
+ALTER USER 'mathwhiz_app'@'localhost'
+IDENTIFIED BY 'MathWhizLocal@123';
+
+GRANT SELECT, INSERT
+ON math_whiz_db.*
+TO 'mathwhiz_app'@'localhost';
+
+FLUSH PRIVILEGES;
 ```
 
-## Steps to Run
-1. Clone the repository and open the `MathWhiz` folder in your IDE as a Maven project.
-2. Run `database/math_whiz_db.sql` in MySQL (Workbench or `mysql -u root -p < database/math_whiz_db.sql`).
-3. Set the DB user/password (see *Database Configuration*).
-4. Build: `mvn clean package` (also runs the unit tests) → creates `target/MathWhiz.war`.
-5. Deploy: copy the WAR into Tomcat's `webapps/` folder and start Tomcat, **or** run it from the IDE with a Tomcat 9 run configuration (application context `/MathWhiz`).
-6. Open <http://localhost:8080/MathWhiz/>.
+## 7. JDBC Database Connection
 
-## Game Rules & Scoring
-| Question | Area | Marks |
-|---|---|---|
-| Q1 | Prime number (1 = prime, 0 = not prime) | 2 |
-| Q2 | Modulus (integers only, divisor never zero) | 2 |
-| Q3 | Trigonometry (sin / cos / tan, degrees) | 3 |
-| Q4 | Trigonometry (sin / cos / tan, degrees) | 3 |
-| **Total** | | **10** |
+The application uses JDBC to connect Java with MySQL. The database connection is managed through the `DBConnection` class.
 
-- Numbers below 2 are not prime.
-- Angles are entered in degrees and converted to radians with `Math.toRadians` before `Math.sin/cos/tan`.
-- Decimal answers are accepted within a tolerance of **±0.01** (so round to 2 decimals).
-- The player types the values: one integer for the prime question, two integers for the modulus question, and an angle in degrees plus a function (sin / cos / tan) for each trigonometry question. The player then types an answer and the server marks it Correct or Wrong.
-- A zero divisor, or tan of an undefined angle (90°, 270°…), is rejected with a validation error.
-- Difficulty: `NORMAL` (stored in the database with every score).
-- Leaderboard: `ORDER BY score DESC, played_at ASC LIMIT 10`.
+The connection details are:
 
-## Testing
-`mvn test` runs `MathServiceTest`:
+- Database: `math_whiz_db`
+- Username: `mathwhiz_app`
+- Password: `MathWhizLocal@123`
 
-| Test case | Expected |
-|---|---|
-| Prime 7 / 8 / 1 | 1 / 0 / 0 |
-| 17 % 5 | 2 |
-| sin 30° / cos 60° / tan 45° | 0.5 / 0.5 / 1.0 |
-| Divisor 0 | Validation error (`ArithmeticException`) |
-| All correct | 10 marks |
-| Wrong answers | Marks deducted per question |
+Environment variables can also be used to configure the database connection.
 
-## Application Screenshots
+## 8. Leaderboard
+
+The leaderboard displays the top 10 players according to their scores.
+
+The records are arranged by:
+
+1. Highest score first.
+2. Earlier playing time first when scores are equal.
+
+SQL query:
+
+```sql
+SELECT *
+FROM game_scores
+ORDER BY score DESC, played_at ASC
+LIMIT 10;
+```
+
+## 9. Screenshots of the Project
+
+The following screenshots show the different pages and features of the Math Whiz application.
+
 ### Welcome Page
 <img width="967" height="581" alt="image" src="https://github.com/user-attachments/assets/dd26e50a-4688-4053-9454-9f1632f390e2" />
 
@@ -109,6 +184,64 @@ CREATE TABLE IF NOT EXISTS game_scores (
 <img width="907" height="512" alt="image" src="https://github.com/user-attachments/assets/62aa6ef1-082a-4f48-b51e-02e1d6b87730" />
 
 
-## GitHub Project Directory Link
+## 10. How to Run the Project
+
+1. Install JDK 17 or later.
+2. Install Apache Tomcat 10.1.
+3. Install MySQL 8.
+4. Create the database and table using the SQL commands provided above.
+5. Make sure the database credentials match the `DBConnection.java` file.
+6. Open the project in an IDE such as IntelliJ IDEA or Eclipse.
+7. Build the project using Maven:
+
+```bash
+mvn clean package
+```
+
+8. Run the unit tests:
+
+```bash
+mvn test
+```
+
+9. Deploy the generated WAR file from the `target` folder to Tomcat 10.1.
+10. Start the Tomcat server and open the application in a browser.
+
+**Example URL:**
+
+`http://localhost:8080/MathWhiz/`
+
+## 11. Expected Output
+
+After starting the application:
+
+- The welcome page appears.
+- The player enters their name and starts the game.
+- Four mathematical challenges are displayed.
+- The player submits answers.
+- The application checks the answers and calculates marks.
+- The result page displays the score out of 10.
+- The player's score is stored in the MySQL database.
+- The leaderboard displays the top 10 players.
+
+## 12. Learning Outcomes
+
+By completing this project, I learned:
+
+- How to develop a Java web application using Servlet and JSP.
+- How to process user input on the server side.
+- How to create and use Java methods for mathematical calculations.
+- How to connect Java applications with MySQL using JDBC.
+- How to perform database operations.
+- How to validate user input and handle errors.
+- How to test Java methods using JUnit.
+
+## 13. Conclusion
+
+Through this lab assignment, I developed a web-based mathematics quiz game named **Math Whiz** using Java Servlet, JSP, JDBC, and MySQL.
+
+This project helped me understand the basic concepts of Java web application development, server-side processing, database connectivity, and result management. It also gave me practical experience in combining Java programming with web technologies.
+
+**GitHub Repository:**  
 https://github.com/saibakhan1104-png/Lab-Live-2-MATHWHIZ-game-project-/tree/main
 
