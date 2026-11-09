@@ -103,10 +103,10 @@ CREATE TABLE IF NOT EXISTS game_scores (
 
 
 ### Result Page
-![Result Page](screenshots/result.png)
+<img width="898" height="768" alt="Screenshot 2026-11-09 224728" src="https://github.com/user-attachments/assets/8efe715c-76cf-46ba-ad9d-f7cbe8d8fbbc" />
 
 ### Leaderboard
-![Leaderboard](screenshots/leaderboard.png)
+<img width="907" height="512" alt="image" src="https://github.com/user-attachments/assets/62aa6ef1-082a-4f48-b51e-02e1d6b87730" />
+
 
 ## GitHub Project Directory Link
-https://github.com/USERNAME/REPOSITORY/tree/main/MathWhiz
